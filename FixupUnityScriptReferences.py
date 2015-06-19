@@ -13,15 +13,6 @@ import shutil
 from IPTech import Asset
 from tempfile import mkstemp
 
-
-def GetUnityScriptFileId(name, namespace):
-	#Unity script file id is the first four bytes of the MD4 hash of "s\0\0\0" + namespace + name, interpreted as a little endian
-	# 32-byte integer. ("s\0\0\0\" is 115 as a 32-byte int, which is the class ID for MonoScript.)
-	hashString = "s\0\0\0" + namespace + name
-	md4 = hashlib.new('md4', hashString.encode('utf-8')).hexdigest().upper()
-	intTuple = struct.unpack("<i", md4[:4]) # unpack the string as 4-byte little endian ints
-	return intTuple[0]
-
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description="Fixup script references for scripts that were previously loose script files and have moved into a dll. Run CreateUnityFileIDForDLLScripts.py on the scripts that create the dll first.")
 	parser.add_argument('scriptIdFile', help="The csv output from CreateUnityFileIDForDLLScripts.py to use.")
